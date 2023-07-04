@@ -1,162 +1,92 @@
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
-//ask how many characters/length of password (between 8-128)
-//ask if yes to lowercase,
-//ask if yes to uppercase
-//ask if yes to numbers
-//ask if yes to special characters
 
-//my code added 7-2-23:
-var passwordLength = 0;
-var lowercase = [
-  "a",
-  "b",
-  "c",
-  "d",
-  "e",
-  "f",
-  "g",
-  "h",
-  "i",
-  "j",
-  "k",
-  "l",
-  "m",
-  "n",
-  "o",
-  "p",
-  "q",
-  "r",
-  "s",
-  "t",
-  "u",
-  "v",
-  "w",
-  "x",
-  "y",
-  "z",
-];
-var uppercase = [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "J",
-  "K",
-  "L",
-  "M",
-  "N",
-  "O",
-  "P",
-  "Q",
-  "R",
-  "S",
-  "T",
-  "U",
-  "V",
-  "W",
-  "X",
-  "Y",
-  "Z",
-];
-var numbers = 0;
-var specialChars = 0;
+var lowercase = "abcdefghijklmnopqrstuvwxyz";
+var uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+var numerals = "0123456789";
+var specialChars = "!#$%&'()*+,-./:;<=>?@[]^_`{|}~";
+
+var numOfChars;
+var yesToSpecialChars;
+var areWeIncludingNumbers;
+var areWeIncludingLowercase;
+var areWeIncludingUppercase;
 
 function start() {
-  var start = confirm("If you're ready to generate a password, click OK");
-  if (start) {
-    minMaxPasswordLength();
-  } else {
-    sayGoodbye();
-  }
+  askLength();
+  passwordParameters();
   return;
 }
 
-function sayGoodbye() {
-  alert("Come back again when you are ready to generate a new password.");
-}
-
-function minMaxPasswordLength() {
-  var response = prompt(
-    `How long do you want the password to be? Minimim length is 8 characters and maximum length is 128 characters.`
-  );
-  //var minMaxPasswordLength = confirm(
-  // "How long do you want the password to be? Minimim length is 8 characters and maximum length is 128 characters."
-  //);
-  pwordLength = parseInt(response);
-
-  if (minMaxPasswordLength) {
-    lowercase();
-  } else {
-    sayGoodbye();
-  }
-}
-//passwordLength = parseInt(response);
-
-minMaxPasswordLength();
-
-//generates random number
-function getRandomNumber(min, max) {
-  var random = Math.floor(Math.random() * (max - min + 1) + min);
-  //return random;
-}
-
-getRandomNumber(8, 128);
-
-//added below on 7-3-23
-//console.log(lowercase[getRandomNumber(0,25)]); return random;
-
-function passwordLength() {
-  //var determinePasswordLength = getRandomNumber(8, 128);
-  var response = confirm(
+function askLength() {
+  numOfChars = prompt(
     "How long do you want the password to be? Minimim length is 8 characters and maximum length is 128 characters."
   );
+  characterTotal();
 }
 
-function minMaxPasswordLength() {
-  passwordLength = getRandomNumber(8, 128);
+function passwordParameters() {
+  areWeIncludingLowercase = confirm(
+    "Do you want to include lowercase letters?"
+  );
+  areWeIncludingUppercase = confirm(
+    "Do you want to include uppercase letters?"
+  );
+  areWeIncludingNumbers = confirm("Do you want to include numbers?");
+
+  yesToSpecialChars = confirm("Do you want to include special characters?");
 }
-minMaxPasswordLength();
-//minMaxPasswordLength = parseInt(response);
-
-//if (minMaxPasswordLength > 128 || minMaxPasswordLength < 8) {
-//alert("Invalid answer.Your password length is 8.");
-//minMaxPasswordLength = 8;
-//lowercase();
-//}
-
-function lowercase() {
-  var response = confirm("Do you want to include lowercase letters?");
-}
-
-function uppercase() {
-  var response = confirm("Do you want to include uppercase letters?");
-}
-
-function numbers() {
-  var response = confirm("Do you want to include numbers?");
+function characterTotal() {
+  if (numOfChars < 8 || numOfChars > 128) {
+    askLength();
+  } else {
+    return;
+  }
 }
 
-function specialChars() {
-  var response = confirm("Do you want to include special characters?");
-  return response;
+function getRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-//generatePassword(){
-//var specialChars = askAboutCharacters()
-//var yesToIncludingNumbers = askAboutNumbers()
+function generatePassword() {
+  var options = ""; //stores options until ready to generate password; populate at end when click generate password button
 
-//var finalPassword = generateFinalPassword();
-//return finalPassword;
+  askLength();
+
+  passwordParameters();
+
+  //2-validate input (8-128 chars, at least one char type is selected)
+  //3-generate password based on criteria
+
+  //4-display generated password on the page--already done (below)
+  if (yesToSpecialChars) {
+    options = options + specialChars;
+  }
+
+  if (areWeIncludingNumbers) {
+    options = options + numerals;
+  }
+
+  if (areWeIncludingLowercase) {
+    options = options + lowercase;
+  }
+
+  if (areWeIncludingUppercase) {
+    options = options + uppercase;
+  }
+
+  var finalPassword = "";
+
+  for (let i = 0; i < parseInt(numOfChars); i++) {
+    finalPassword = finalPassword + options[getRandomNumber(0, options.length)];
+  }
+
+  return finalPassword;
+}
 
 // Write password to the #password input
 function writePassword() {
-  var password = generatePassword();
+  var password = generatePassword(); //value of generatePassword is being stored in password
   var passwordText = document.querySelector("#password");
 
   passwordText.value = password;
@@ -164,7 +94,6 @@ function writePassword() {
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
-start();
 
 //GIVEN I need a new, secure password
 //WHEN I click the button to generate a password
