@@ -6,17 +6,23 @@ var uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 var numerals = "0123456789";
 var specialChars = "!#$%&'()*+,-./:;<=>?@[]^_`{|}~";
 
-var numOfChars;
-var yesToSpecialChars;
-var areWeIncludingNumbers;
-var areWeIncludingLowercase;
-var areWeIncludingUppercase;
+var numOfChars = 0;
+var yesToSpecialChars = 0;
+var areWeIncludingNumbers = 0;
+var areWeIncludingLowercase = 0;
+var areWeIncludingUppercase = 0;
 
 function start() {
   askLength();
   passwordParameters();
   return;
 }
+
+console.log(numOfChars);
+console.log(yesToSpecialChars);
+console.log(areWeIncludingNumbers);
+console.log(areWeIncludingLowercase);
+console.log(areWeIncludingUppercase);
 
 function askLength() {
   numOfChars = prompt(
